@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Button, Text, Card, Switch, Slider, Divider } from 'react-native-paper';
+import { Button, Text, Card, Switch } from 'react-native-paper';
 import { Link } from 'expo-router';
 import { theme } from '../constants/theme';
 import { useApiKey } from '../context/ApiKeyContext';
+import { useRouter } from 'expo-router';
+import Slider from '@react-native-community/slider';
 
 export default function Settings() {
   const [highContrast, setHighContrast] = useState(false);
   const [textSize, setTextSize] = useState(1);
   const [textToSpeech, setTextToSpeech] = useState(false);
   const { apiKey } = useApiKey();
+  const router = useRouter();
 
   return (
     <ScrollView style={styles.container}>
@@ -59,11 +62,13 @@ export default function Settings() {
             </Text>
           </View>
           
-          <Link href="/api-key" asChild>
-            <Button mode="outlined" style={styles.button}>
-              {apiKey ? 'Update API Key' : 'Add API Key'}
-            </Button>
-          </Link>
+          <Button 
+            mode="outlined" 
+            style={styles.button}
+            onPress={() => router.push('/api-key')}
+          >
+            {apiKey ? 'Update API Key' : 'Add API Key'}
+          </Button>
         </Card.Content>
       </Card>
 
