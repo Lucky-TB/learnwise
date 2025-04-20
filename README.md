@@ -1,50 +1,65 @@
-# Welcome to your Expo app 👋
+# LearnWise 📚
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A smart learning companion that helps you track progress, create study plans, and take quizzes while adapting to your accessibility needs.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 📊 Progress tracking with interactive charts
+- 📝 Personalized study plans
+- 🎯 Adaptive quizzes
+- ♿️ Accessibility features (text-to-speech, high contrast mode)
+- 🌓 Dark/Light theme support
+- 📱 Cross-platform (iOS & Android)
 
+## Tech Stack
+
+- React Native with Expo
+- NativeWind for styling
+- Expo Router for navigation
+- Context API for state management
+- React Native Paper
+- Expo Blur
+
+## Getting Started
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/yourusername/learnwise.git
+   cd learnwise
+   ```
+
+2. Install dependencies
    ```bash
    npm install
    ```
 
-2. Start the app
-
+3. Start the development server
    ```bash
-    npx expo start
+   npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+4. Run on your device
+   - Scan the QR code with Expo Go (Android) or Camera app (iOS)
+   - Press 'a' for Android emulator
+   - Press 'i' for iOS simulator
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## API Integration
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+This project uses the following APIs:
+- OpenAI API for generating study plans and quiz questions
+- Text-to-Speech API for accessibility features
 
-## Get a fresh project
+To use these features, you'll need to:
+1. Create a `.env` file in the root directory
+2. Add your API keys:
+   ```
+   OPENAI_API_KEY=your_openai_api_key
+   ```
 
-When you're ready, run:
+## Contributing
 
-```bash
-npm run reset-project
-```
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## License
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -1,103 +1,67 @@
-import { useState, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, StatusBar } from 'react-native';
-import { Button, Text, Surface, Switch, Divider } from 'react-native-paper';
+import { Switch, Divider } from 'react-native-paper';
 import { router } from 'expo-router';
 import { theme } from '../../constants/theme';
 import { useApiKey } from '../../context/ApiKeyContext';
-import { Ionicons } from '@expo/vector-icons';
+import { useSettings } from '../../context/SettingsContext';
 import Slider from '@react-native-community/slider';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const STORAGE_KEYS = {
-  HIGH_CONTRAST: '@settings_high_contrast',
-  TEXT_SIZE: '@settings_text_size',
-  TEXT_TO_SPEECH: '@settings_text_to_speech',
-};
+import { Text, Button, Card } from '../../components/ui';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function SettingsScreen() {
-  const [highContrast, setHighContrast] = useState(false);
-  const [textSize, setTextSize] = useState(1.0);
-  const [textToSpeech, setTextToSpeech] = useState(false);
   const { apiKey } = useApiKey();
-
-  useEffect(() => {
-    loadSettings();
-  }, []);
-
-  const loadSettings = async () => {
-    try {
-      const [highContrastValue, textSizeValue, textToSpeechValue] = await Promise.all([
-        AsyncStorage.getItem(STORAGE_KEYS.HIGH_CONTRAST),
-        AsyncStorage.getItem(STORAGE_KEYS.TEXT_SIZE),
-        AsyncStorage.getItem(STORAGE_KEYS.TEXT_TO_SPEECH),
-      ]);
-
-      if (highContrastValue !== null) {
-        setHighContrast(JSON.parse(highContrastValue));
-      }
-      if (textSizeValue !== null) {
-        setTextSize(JSON.parse(textSizeValue));
-      }
-      if (textToSpeechValue !== null) {
-        setTextToSpeech(JSON.parse(textToSpeechValue));
-      }
-    } catch (error) {
-      console.error('Error loading settings:', error);
-    }
-  };
-
-  const handleHighContrastChange = async (value: boolean) => {
-    setHighContrast(value);
-    try {
-      await AsyncStorage.setItem(STORAGE_KEYS.HIGH_CONTRAST, JSON.stringify(value));
-    } catch (error) {
-      console.error('Error saving high contrast setting:', error);
-    }
-  };
-
-  const handleTextSizeChange = async (value: number) => {
-    setTextSize(value);
-    try {
-      await AsyncStorage.setItem(STORAGE_KEYS.TEXT_SIZE, JSON.stringify(value));
-    } catch (error) {
-      console.error('Error saving text size setting:', error);
-    }
-  };
-
-  const handleTextToSpeechChange = async (value: boolean) => {
-    setTextToSpeech(value);
-    try {
-      await AsyncStorage.setItem(STORAGE_KEYS.TEXT_TO_SPEECH, JSON.stringify(value));
-    } catch (error) {
-      console.error('Error saving text-to-speech setting:', error);
-    }
-  };
+  const { 
+    highContrast, 
+    textSize, 
+    textToSpeech, 
+    setHighContrast, 
+    setTextSize, 
+    setTextToSpeech 
+  } = useSettings();
+  const { theme } = useTheme();
 
   const handleApiKeyPress = () => {
     router.push('/(screens)/api-key');
   };
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={theme.colors.background} />
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <Text style={[styles.headerTitle, theme.fonts.titleLarge]}>Settings</Text>
-          <Text style={[styles.headerSubtitle, theme.fonts.bodyMedium]}>Customize your learning experience</Text>
-        </View>
+    <ScrollView style={{ flex: 1, backgroundColor: theme.colors.background.DEFAULT }}>
+      <View style={{ padding: 16 }}>
+        <Text variant="h1">Settings</Text>
+        <Card
+          title="Accessibility"
+          subtitle="Customize your app experience"
+          icon="accessibility"
+          style={{ marginTop: 16 }}
+        >
+          <View style={{ gap: 16 }}>
+            <View>
+              <Text variant="subtitle">Text Size</Text>
+              <Text variant="body">Adjust the size of text throughout the app</Text>
+            </View>
+            <View>
+              <Text variant="subtitle">High Contrast</Text>
+              <Text variant="body">Increase contrast for better visibility</Text>
+            </View>
+            <View>
+              <Text variant="subtitle">Text to Speech</Text>
+              <Text variant="body">Enable voice reading of content</Text>
+            </View>
+          </View>
+        </Card>
 
-        <Surface style={styles.card}>
-          <Text style={[styles.sectionTitle, theme.fonts.titleMedium]}>Accessibility</Text>
+        <Card variant="elevated" style={styles.card}>
+          <Text variant="h3" style={styles.sectionTitle}>Accessibility</Text>
           
           <View style={styles.setting}>
             <View style={styles.settingInfo}>
-              <Text style={[styles.settingLabel, theme.fonts.titleSmall]}>High Contrast Mode</Text>
-              <Text style={[styles.settingDescription, theme.fonts.bodySmall]}>Enhance visibility for better readability</Text>
+              <Text variant="body" style={styles.settingLabel}>High Contrast Mode</Text>
+              <Text variant="caption" color="muted">Enhance visibility for better readability</Text>
             </View>
             <Switch
               value={highContrast}
-              onValueChange={handleHighContrastChange}
-              color={theme.colors.primary}
+              onValueChange={setHighContrast}
+              color={theme.colors.primary.DEFAULT}
             />
           </View>
 
@@ -105,22 +69,22 @@ export default function SettingsScreen() {
 
           <View style={styles.setting}>
             <View style={styles.settingInfo}>
-              <Text style={[styles.settingLabel, theme.fonts.titleSmall]}>Text Size</Text>
-              <Text style={[styles.settingDescription, theme.fonts.bodySmall]}>Adjust the size of text throughout the app</Text>
+              <Text variant="body" style={styles.settingLabel}>Text Size</Text>
+              <Text variant="caption" color="muted">Adjust the size of text throughout the app</Text>
             </View>
             <View style={styles.sliderContainer}>
               <Slider
                 value={textSize}
-                onValueChange={handleTextSizeChange}
+                onValueChange={setTextSize}
                 minimumValue={0.8}
                 maximumValue={1.4}
                 step={0.1}
-                minimumTrackTintColor={theme.colors.primary}
+                minimumTrackTintColor={theme.colors.primary.DEFAULT}
                 maximumTrackTintColor={theme.colors.border}
-                thumbTintColor={theme.colors.primary}
+                thumbTintColor={theme.colors.primary.DEFAULT}
                 style={styles.slider}
               />
-              <Text style={[styles.sliderValue, theme.fonts.bodySmall]}>{Math.round(textSize * 100)}%</Text>
+              <Text variant="caption" color="muted">{Math.round(textSize * 100)}%</Text>
             </View>
           </View>
 
@@ -128,56 +92,56 @@ export default function SettingsScreen() {
 
           <View style={styles.setting}>
             <View style={styles.settingInfo}>
-              <Text style={[styles.settingLabel, theme.fonts.titleSmall]}>Text-to-Speech</Text>
-              <Text style={[styles.settingDescription, theme.fonts.bodySmall]}>Have content read aloud to you</Text>
+              <Text variant="body" style={styles.settingLabel}>Text-to-Speech</Text>
+              <Text variant="caption" color="muted">Have content read aloud to you</Text>
             </View>
             <Switch
               value={textToSpeech}
-              onValueChange={handleTextToSpeechChange}
-              color={theme.colors.primary}
+              onValueChange={setTextToSpeech}
+              color={theme.colors.primary.DEFAULT}
             />
           </View>
-        </Surface>
+        </Card>
 
-        <Surface style={styles.card}>
-          <Text style={[styles.sectionTitle, theme.fonts.titleMedium]}>AI Settings</Text>
+        <Card variant="elevated" style={styles.card}>
+          <Text variant="h3" style={styles.sectionTitle}>AI Settings</Text>
           
           <View style={styles.setting}>
             <View style={styles.settingInfo}>
-              <Text style={[styles.settingLabel, theme.fonts.titleSmall]}>Gemini API Key</Text>
-              <Text style={[styles.settingDescription, theme.fonts.bodySmall]}>
+              <Text variant="body" style={styles.settingLabel}>Gemini API Key</Text>
+              <Text variant="caption" color="muted">
                 {apiKey ? 'Your API key is set up' : 'Set up your API key to use AI features'}
               </Text>
             </View>
             <Button 
-              mode="outlined" 
+              variant="outline" 
               onPress={handleApiKeyPress}
               style={styles.apiKeyButton}
-              contentStyle={styles.buttonContent}
+              icon={apiKey ? "key-outline" : "key"}
             >
               {apiKey ? 'Update Key' : 'Set Up Key'}
             </Button>
           </View>
-        </Surface>
+        </Card>
 
-        <Surface style={styles.card}>
-          <Text style={[styles.sectionTitle, theme.fonts.titleMedium]}>About</Text>
-          <Text style={[styles.aboutText, theme.fonts.bodyMedium]}>
+        <Card variant="elevated" style={styles.card}>
+          <Text variant="h3" style={styles.sectionTitle}>About</Text>
+          <Text variant="body" style={styles.aboutText}>
             LearnWise v1.0.0
           </Text>
-          <Text style={[styles.copyrightText, theme.fonts.bodySmall]}>
+          <Text variant="caption" color="muted" style={styles.copyrightText}>
             © 2024 LearnWise. All rights reserved.
           </Text>
-        </Surface>
-      </ScrollView>
-    </View>
+        </Card>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.background.DEFAULT,
   },
   scrollView: {
     flex: 1,
@@ -186,26 +150,12 @@ const styles = StyleSheet.create({
     padding: theme.spacing.lg,
     alignItems: 'center',
   },
-  headerTitle: {
-    fontSize: 28,
-    marginBottom: theme.spacing.xs,
-    color: theme.colors.primary,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: theme.colors.text,
-    textAlign: 'center',
-  },
   card: {
     margin: theme.spacing.md,
     padding: theme.spacing.md,
-    borderRadius: theme.roundness,
-    elevation: 2,
   },
   sectionTitle: {
-    fontSize: 20,
     marginBottom: theme.spacing.md,
-    color: theme.colors.primary,
   },
   setting: {
     flexDirection: 'row',
@@ -218,13 +168,7 @@ const styles = StyleSheet.create({
     marginRight: theme.spacing.md,
   },
   settingLabel: {
-    fontSize: 16,
     marginBottom: theme.spacing.xs,
-    color: theme.colors.text,
-  },
-  settingDescription: {
-    fontSize: 14,
-    color: theme.colors.placeholder,
   },
   divider: {
     marginVertical: theme.spacing.sm,
@@ -232,36 +176,19 @@ const styles = StyleSheet.create({
   sliderContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: 150,
+    width: 120,
   },
   slider: {
     flex: 1,
-    height: 40,
-  },
-  sliderValue: {
-    fontSize: 14,
-    width: 40,
-    textAlign: 'right',
-    color: theme.colors.text,
+    marginRight: theme.spacing.sm,
   },
   apiKeyButton: {
-    borderRadius: theme.roundness,
+    minWidth: 100,
   },
   aboutText: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginBottom: theme.spacing.md,
-    color: theme.colors.text,
+    marginBottom: theme.spacing.xs,
   },
   copyrightText: {
-    fontSize: 14,
-    textAlign: 'center',
-    marginVertical: theme.spacing.xl,
-    color: theme.colors.placeholder,
-  },
-  buttonContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: theme.spacing.sm,
   },
 }); 
