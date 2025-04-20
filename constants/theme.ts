@@ -1,19 +1,21 @@
-import { DefaultTheme } from 'react-native-paper';
+import { MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
 
-export const theme = {
-  ...DefaultTheme,
+const baseTheme = {
   colors: {
-    ...DefaultTheme.colors,
-    primary: '#6200ee',
-    accent: '#03dac4',
-    background: '#f6f6f6',
-    surface: '#ffffff',
-    text: '#000000',
-    error: '#B00020',
-    success: '#4CAF50',
-    disabled: '#757575',
-    placeholder: '#9E9E9E',
-    backdrop: 'rgba(0, 0, 0, 0.5)',
+    primary: '#3B82F6',
+    secondary: '#10B981',
+    accent: '#8B5CF6',
+    background: '#F9FAFB',
+    surface: '#FFFFFF',
+    text: '#1F2937',
+    error: '#EF4444',
+    success: '#10B981',
+    disabled: '#9CA3AF',
+    placeholder: '#6B7280',
+    card: '#FFFFFF',
+    border: '#E5E7EB',
+    highlight: '#F3F4F6',
+    shadow: '#000000',
   },
   spacing: {
     xs: 4,
@@ -21,16 +23,38 @@ export const theme = {
     md: 16,
     lg: 24,
     xl: 32,
+    xxl: 48,
   },
-  roundness: 8,
+  roundness: 12,
+  animation: {
+    scale: 1.0,
+  },
+};
+
+export const theme = {
+  ...MD3LightTheme,
+  ...baseTheme,
+  fonts: MD3LightTheme.fonts,
 };
 
 export const darkTheme = {
-  ...theme,
+  ...MD3DarkTheme,
+  ...baseTheme,
   colors: {
-    ...theme.colors,
-    background: '#121212',
-    surface: '#1e1e1e',
-    text: '#ffffff',
+    ...baseTheme.colors,
+    primary: '#60A5FA',
+    secondary: '#34D399',
+    accent: '#A78BFA',
+    background: '#111827',
+    surface: '#1F2937',
+    text: '#F9FAFB',
+    error: '#F87171',
+    success: '#34D399',
+    disabled: '#6B7280',
+    placeholder: '#9CA3AF',
+    card: '#1F2937',
+    border: '#374151',
+    highlight: '#374151',
   },
+  fonts: MD3DarkTheme.fonts,
 }; 

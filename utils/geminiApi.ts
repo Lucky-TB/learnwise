@@ -13,15 +13,15 @@ export function initializeGeminiModel(apiKey: string) {
 // Function to generate a study plan based on user preferences
 export async function generateStudyPlan(
   apiKey: string,
-  subject: string,
-  learningStyle: 'visual' | 'text' | 'interactive',
-  skillLevel: 'beginner' | 'intermediate' | 'advanced'
+  topic: string,
+  learningStyle: string,
+  skillLevel: string
 ): Promise<string> {
   try {
     const model = initializeGeminiModel(apiKey);
     
     const prompt = `
-      Create a detailed study plan for ${subject} at the ${skillLevel} level.
+      Create a detailed study plan for ${topic} at the ${skillLevel} level.
       The user prefers ${learningStyle} learning style.
       
       Include:
@@ -50,7 +50,8 @@ export async function generateQuizQuestions(
   apiKey: string,
   topic: string,
   difficulty: 'easy' | 'medium' | 'hard',
-  count: number = 3
+  count: number = 3,
+  optionCount: number = 4
 ): Promise<Array<{
   question: string;
   options: string[];
@@ -61,7 +62,7 @@ export async function generateQuizQuestions(
     
     const prompt = `
       Generate ${count} multiple-choice questions about ${topic} at ${difficulty} difficulty level.
-      Each question should have 4 options with one correct answer.
+      Each question should have ${optionCount} options with one correct answer.
       Format the response as a JSON array with the following structure:
       [
         {
